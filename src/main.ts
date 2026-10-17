@@ -25,11 +25,12 @@ async function boot(): Promise<void> {
     bootEl!.innerHTML = '<div class="boot-title">Tu navegador no soporta <span>WebGL2</span></div>';
     return;
   }
+  // Si las fuentes fallan (bloqueadas por el navegador o la red), el juego arranca igual con la tipografía de respaldo
   const fonts = Promise.all([
     document.fonts.load('700 40px "Barlow Condensed"'),
     document.fonts.load('800 40px "Barlow Condensed"'),
     document.fonts.load('500 20px "Barlow Condensed"'),
-  ]);
+  ]).catch(() => undefined);
   await Promise.race([fonts, new Promise((r) => setTimeout(r, 2500))]);
 
   let game: Game;

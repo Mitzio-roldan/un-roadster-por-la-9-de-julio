@@ -6,8 +6,6 @@ Juego web 3D de manejo libre por la **Avenida 9 de Julio** de Buenos Aires, al a
 
 ![Gameplay](docs/gameplay.gif)
 
-> **GIF pendiente.** Para grabarlo: `npm run dev`, abrí el juego en una ventana de 1280×720, jugá unos 10 s (salto con giro + propulsores) y grabá con [Peek](https://github.com/phw/peek), ScreenToGif o OBS. Convertilo con `ffmpeg -i clip.mp4 -vf "fps=24,scale=960:-1" docs/gameplay.gif` y guardalo en `docs/gameplay.gif`.
-
 ## Características
 
 - Avenida infinita generada por cuadras recicladas: carriles del Metrobus con paradas, canteros con jacarandás, calles laterales, sendas, flechas, semáforos funcionales, carteles de calles reales (Av. Corrientes, Av. de Mayo, Tucumán, Lavalle…), pórticos de señalización, publicidades de marcas **inventadas** y el **Obelisco** con proporciones reales.

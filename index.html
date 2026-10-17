@@ -42,6 +42,23 @@
       </div>
     </div>
     <noscript>Este juego necesita JavaScript y WebGL.</noscript>
+    <script>
+      // Diagnóstico de carga: si pasados 9 s sigue la pantalla de carga, muestra qué falló (navegadores internos de apps)
+      (function () {
+        var errs = [];
+        function add(m) { if (errs.length < 3) errs.push(String(m).slice(0, 140)); }
+        window.addEventListener('error', function (e) { add(e.message || (e.target && e.target.src) || 'error de carga'); }, true);
+        window.addEventListener('unhandledrejection', function (e) { add(e.reason && e.reason.message ? e.reason.message : e.reason); });
+        setTimeout(function () {
+          var b = document.getElementById('boot');
+          if (!b || b.className.indexOf('hide') !== -1) return;
+          var p = document.createElement('p');
+          p.style.cssText = 'text-align:center;opacity:.75;padding:0 24px;font:500 14px/1.4 sans-serif;max-width:420px;justify-self:center';
+          p.textContent = 'Está tardando más de lo normal. Probá abrir el link en Chrome o Safari.' + (errs.length ? ' (' + errs.join(' | ') + ')' : '');
+          b.appendChild(p);
+        }, 9000);
+      })();
+    </script>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

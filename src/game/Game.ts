@@ -63,6 +63,8 @@ export class Game {
   private slowMoScale = 1;
   private acc = 0;
   private last = 0;
+  private sizeW = 0;
+  private sizeH = 0;
   private crashTimer = 0;
   private readonly ev = makeEvents();
   private readonly statics: StaticBox[] = [];
@@ -243,8 +245,11 @@ export class Game {
   }
 
   private resize(): void {
-    const w = innerWidth;
-    const h = innerHeight;
+    // Algunos navegadores internos (p. ej. el de X) informan 0×0 al cargar y tardan en avisar el tamaño real
+    const w = Math.max(1, innerWidth);
+    const h = Math.max(1, innerHeight);
+    this.sizeW = innerWidth;
+    this.sizeH = innerHeight;
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, this.quality.preset.pixelRatio) * this.quality.scale);
     this.renderer.setSize(w, h);
     this.post.setSize(w, h, this.renderer.getPixelRatio());
@@ -262,6 +267,7 @@ export class Game {
     const realDt = Math.min(1 / 15, (now - this.last) / 1000);
     this.last = now;
     this.realTime += realDt;
+    if (innerWidth !== this.sizeW || innerHeight !== this.sizeH) this.resize();
     this.quality.sample(realDt, this.state === 'playing', () => this.resize(), (q) => this.applyQuality(q, false));
 
     const controls = this.input.poll();

@@ -32,8 +32,19 @@ async function boot(): Promise<void> {
   ]);
   await Promise.race([fonts, new Promise((r) => setTimeout(r, 2500))]);
 
-  const game = new Game(app);
-  game.start();
+  let game: Game;
+  try {
+    game = new Game(app);
+    game.start();
+  } catch (err) {
+    console.error(err);
+    bootEl!.innerHTML = '<div class="boot-title">No se pudo iniciar <span>el juego</span></div><p style="text-align:center;opacity:.7;padding:0 24px">Probá abrir el link en Chrome o Safari (el navegador interno de algunas apps no soporta WebGL2).</p>';
+    const detail = document.createElement('p');
+    detail.style.cssText = 'text-align:center;opacity:.5;padding:0 24px;font-size:12px';
+    detail.textContent = String((err as Error)?.message ?? err).slice(0, 160);
+    bootEl!.appendChild(detail);
+    return;
+  }
   void loadOptionalCarModel(game.player);
   requestAnimationFrame(() => bootEl?.classList.add('hide'));
   setTimeout(() => bootEl?.remove(), 800);

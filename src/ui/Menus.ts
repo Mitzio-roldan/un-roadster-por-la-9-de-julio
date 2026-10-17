@@ -1,5 +1,6 @@
 import type { QualityLevel } from '../config';
 import { isTouchDevice } from './device';
+import { enterFullscreen, fullscreenSupported, isFullscreen, onFullscreenChange, toggleFullscreen } from './fullscreen';
 import { shareOnX } from './share';
 
 export interface MenuCallbacks {
@@ -112,7 +113,7 @@ export class Menus {
     // Botones flotantes durante el juego (pausa y sonido)
     this.corner = document.createElement('div');
     this.corner.className = 'corner hidden';
-    this.corner.innerHTML = `<button class="cbtn" data-a="mute" aria-label="Sonido"></button><button class="cbtn" data-a="pause" aria-label="Pausa">❚❚</button>`;
+    this.corner.innerHTML = `<button class="cbtn" data-a="fs" aria-label="Pantalla completa">⛶</button><button class="cbtn" data-a="mute" aria-label="Sonido"></button><button class="cbtn" data-a="pause" aria-label="Pausa">❚❚</button>`;
     container.appendChild(this.corner);
 
     const onClick = (e: Event) => {
@@ -121,6 +122,8 @@ export class Menus {
       const a = t.dataset.a!;
       switch (a) {
         case 'play':
+          // En celular, entrar a pantalla completa con el mismo toque de "Jugar"
+          if (isTouchDevice()) void enterFullscreen();
           cb.onPlay();
           break;
         case 'retry':
@@ -156,6 +159,9 @@ export class Menus {
         case 'night':
           cb.onToggleNight();
           break;
+        case 'fs':
+          void toggleFullscreen();
+          break;
         case 'mute':
           cb.onToggleMute();
           this.refresh();
@@ -176,6 +182,8 @@ export class Menus {
     for (const el of [r, this.corner]) el.addEventListener('pointerdown', (e) => e.stopPropagation());
     this.renderControls();
     this.refresh();
+    onFullscreenChange(() => this.refresh());
+    this.corner.querySelector<HTMLElement>('[data-a="fs"]')!.hidden = !fullscreenSupported();
   }
 
   show(s: Screen | null): void {
@@ -223,10 +231,11 @@ export class Menus {
   /** Refresca los toggles (noche, sonido, calidad). */
   refresh(): void {
     const st = this.cb.getState();
+    const fs = fullscreenSupported();
     const html = `
       <button class="chip" data-a="night">${st.night ? '🌙 Noche' : '🌇 Atardecer'}</button>
       <button class="chip" data-a="quality">Calidad: ${QUALITY_LABEL[st.quality]}</button>
-      <button class="chip" data-a="mute">${st.muted ? '🔇 Sonido' : '🔊 Sonido'}</button>`;
+      <button class="chip" data-a="mute">${st.muted ? '🔇 Sonido' : '🔊 Sonido'}</button>${fs ? `<button class="chip" data-a="fs">${isFullscreen() ? '⛶ Salir de pantalla completa' : '⛶ Pantalla completa'}</button>` : ''}`;
     for (const el of this.root.querySelectorAll('.settings')) el.innerHTML = html;
     const mute = this.corner.querySelector('[data-a="mute"]')!;
     mute.textContent = st.muted ? '🔇' : '🔊';

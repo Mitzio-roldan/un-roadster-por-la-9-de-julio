@@ -136,8 +136,8 @@ kbd { display: inline-grid; place-items: center; min-width: 30px; height: 28px; 
 .corner { position: absolute; top: calc(12px + var(--safe-t)); right: calc(12px + var(--safe-r)); z-index: 15; display: flex; gap: 8px; }
 .corner.hidden { display: none; }
 .cbtn { width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line); background: rgba(10,12,16,.5); color: #fff; font-size: 16px; cursor: pointer; backdrop-filter: blur(6px); }
-.cbtn[data-a="mute"] { display: none; }
-.touch-ui .cbtn[data-a="mute"] { display: block; }
+.cbtn[data-a="mute"], .cbtn[data-a="fs"] { display: none; }
+.touch-ui .cbtn[data-a="mute"], .touch-ui .cbtn[data-a="fs"]:not([hidden]) { display: block; }
 
 .rotate { display: none; }
 @media (orientation: portrait) {

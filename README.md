@@ -60,6 +60,8 @@ npm run preview
 npm run check:accel
 ```
 
+**Pantalla completa:** hay un botón en el menú y durante la partida (en celular entra solo al tocar Jugar). En iPhone, Safari no la soporta: usá *Compartir → Agregar a pantalla de inicio* para abrirlo sin barras del navegador.
+
 Parámetros de desarrollo: `?play` (arranca directo), `?night`, `?auto` (piloto automático), `?carview=<grados>` (inspección del auto), `?og&carview=205&r=7.5&h=0.6&sx=2.4&ly=0.2` (escena de la imagen Open Graph).
 
 ## Deploy

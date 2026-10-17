@@ -60,13 +60,29 @@ npm run preview
 npm run check:accel
 ```
 
-Parámetros de desarrollo: `?play` (arranca directo), `?night`, `?auto` (piloto automático), `?carview=<grados>` (inspección del auto), `?og&carview=18&r=10&h=0.8&boostfx` (escena de la imagen Open Graph).
+Parámetros de desarrollo: `?play` (arranca directo), `?night`, `?auto` (piloto automático), `?carview=<grados>` (inspección del auto), `?og&carview=205&r=7.5&h=0.6&sx=2.4&ly=0.2` (escena de la imagen Open Graph).
 
-## Deploy en Vercel
+## Deploy
+
+El juego compila a archivos estáticos (`dist/`), así que se puede publicar en cualquier hosting estático. Dos opciones ya preparadas:
+
+### Con Vercel
 
 1. Subí el repo a GitHub.
 2. En Vercel, elegí **Add New → Project** e importá el repo. Detecta Vite solo (también está `vercel.json`): build `npm run build`, salida `dist`.
-3. Actualizá la URL absoluta de `og:image`, `og:url` y `twitter:image` en `index.html` con tu dominio final.
+
+### Con Docker
+
+El `Dockerfile` compila el juego y lo sirve con nginx (con compresión y cache de assets):
+
+```bash
+docker build -t un-roadster .
+docker run -p 8080:80 un-roadster   # http://localhost:8080
+```
+
+También sirve para cualquier plataforma que despliegue desde un Dockerfile.
+
+Con cualquiera de las dos, actualizá la URL absoluta de `og:image`, `og:url` y `twitter:image` en `index.html` con tu dominio final.
 
 ## Disclaimer
 
@@ -84,6 +100,6 @@ A free, browser-based 3D driving game set on **Avenida 9 de Julio** in Buenos Ai
 **Mobile:** left virtual joystick for steering; ACCELERATE, BRAKE, JUMP (double tap = spin) and THRUSTERS buttons on the right, with true multitouch. Play in landscape.
 
 **Stack:** Vite, strict TypeScript, Three.js and WebAudio. All art is procedural, with no external assets.
-**Run:** `npm install && npm run dev`. **Build:** `npm run build`. **Deploy:** import the repo in Vercel (it auto-detects Vite and outputs to `dist`), then update the absolute OG URLs in `index.html`.
+**Run:** `npm install && npm run dev`. **Build:** `npm run build`. **Deploy:** import the repo in Vercel (it auto-detects Vite and outputs to `dist`), or use Docker (`docker build -t un-roadster . && docker run -p 8080:80 un-roadster`). Then update the absolute OG URLs in `index.html`.
 
 **Disclaimer:** fan project, not affiliated with any car maker. The car design is inspired by an electric hypercar unveiled in 2026; it uses no names, logos or images of any brand. All advertised brands are fictional. MIT license.
